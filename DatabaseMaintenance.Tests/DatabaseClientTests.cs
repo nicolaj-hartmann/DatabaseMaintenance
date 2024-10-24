@@ -43,5 +43,30 @@ namespace DatabaseMaintenance.Tests
 
         public async Task DisposeAsync()
         {
-            using (var connection = new SqlConnection($"Server=localhost,{SqlServerPort};User Id=sa;Password=YourPassword123;"))
-        
+            await using var connection = new SqlConnection($"Server=localhost,{SqlServerPort};User Id=sa;Password=YourPassword123;");
+            await connection.OpenAsync();
+
+            await using (var command = new SqlCommand($"ALTER DATABASE {_databaseName} SET SINGLE_USER WITH ROLLBACK IMMEDIATE;", connection))
+            {
+                await command.ExecuteNonQueryAsync();
+            }
+
+            _ = Task.Run(async () =>
+            {
+                try
+                {
+                    await using (var command = new SqlCommand($"DROP DATABASE {_databaseName};", connection))
+                    {
+                        await command.ExecuteNonQueryAsync();
+                    }
+                }
+                catch (SqlException)
+                {
+                    // Ignore all exceptions
+                }
+            });
+        }
+
+
+    }
+}
