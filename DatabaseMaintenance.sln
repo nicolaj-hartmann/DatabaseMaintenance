@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatabaseMaintenance", "DatabaseMaintenance\DatabaseMaintenance.csproj", "{A10D0DE7-FE7C-4723-90C4-6750DE7FACFC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatabaseMaintenance.Tests", "DatabaseMaintenance.Tests\DatabaseMaintenance.Tests.csproj", "{C5F9DB84-03EF-49CA-B34F-4D345C22D4A7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A10D0DE7-FE7C-4723-90C4-6750DE7FACFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A10D0DE7-FE7C-4723-90C4-6750DE7FACFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A10D0DE7-FE7C-4723-90C4-6750DE7FACFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A10D0DE7-FE7C-4723-90C4-6750DE7FACFC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C5F9DB84-03EF-49CA-B34F-4D345C22D4A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5F9DB84-03EF-49CA-B34F-4D345C22D4A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5F9DB84-03EF-49CA-B34F-4D345C22D4A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5F9DB84-03EF-49CA-B34F-4D345C22D4A7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

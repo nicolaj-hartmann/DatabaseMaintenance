@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.2" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Scripts\CommandExecute.sql" />
+      <EmbeddedResource Include="Scripts\CommandExecute.sql" />
+      <None Remove="Scripts\IndexOptimize.sql" />
+      <EmbeddedResource Include="Scripts\IndexOptimize.sql" />
+    </ItemGroup>
+
+</Project>
