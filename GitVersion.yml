@@ -1,7 +1,7 @@
 mode: ContinuousDeployment
 branches:
   main:
-    label: 'beta'  # This could be the suffix to use for the main branch
+    label: 'beta'  
     increment: Patch
   develop:
     increment: Minor
