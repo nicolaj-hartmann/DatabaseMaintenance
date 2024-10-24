@@ -69,7 +69,7 @@ In modern applications, maintaining database performance is crucial. As database
     - Simple installation via NuGet and straightforward usage patterns make it easy to incorporate into existing .NET applications, enhancing your database management capabilities with minimal effort.
 
 - **Logging Capabilities**:
-    - Output messages and logs during execution can be captured and displayed, facilitating debugging and monitoring of maintenance tasks.
+    - Output messages and logs during execution can be captured and displayed, facilitating debugging and monitoring of maintenance tasks. For now you need to parse the result yourselves.
 
 ---
 
