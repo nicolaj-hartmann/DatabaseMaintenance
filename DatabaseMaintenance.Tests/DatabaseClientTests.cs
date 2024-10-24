@@ -1,8 +1,4 @@
-﻿using System;
-using System.Data.SqlClient;
-using System.Threading.Tasks;
-using DatabaseMaintenance;
-using Microsoft.Data.SqlClient; // Adjust this according to your project's namespace
+﻿using Microsoft.Data.SqlClient; // Adjust this according to your project's namespace
 using Xunit;
 
 namespace DatabaseMaintenance.Tests
@@ -24,14 +20,10 @@ namespace DatabaseMaintenance.Tests
 
         private async Task CreateDatabase()
         {
-            using (var connection = new SqlConnection($"Server=localhost,{SqlServerPort};User Id=sa;Password=YourPassword123;"))
-            {
-                await connection.OpenAsync();
-                using (var command = new SqlCommand($"CREATE DATABASE {_databaseName};", connection))
-                {
-                    await command.ExecuteNonQueryAsync();
-                }
-            }
+            await using var connection = new SqlConnection($"Server=localhost,{SqlServerPort};User Id=sa;Password=YourPassword123;");
+            await connection.OpenAsync();
+            await using var command = new SqlCommand($"CREATE DATABASE {_databaseName};", connection);
+            await command.ExecuteNonQueryAsync();
         }
 
         [Fact]
@@ -42,15 +34,11 @@ namespace DatabaseMaintenance.Tests
 
             // Add assertions to verify that the scripts were executed correctly.
             // Example: Check if a specific table was created or if data exists.
-            using (var connection = new SqlConnection(_connectionString))
-            {
-                await connection.OpenAsync();
-                using (var command = new SqlCommand("SELECT COUNT(*) FROM sys.tables", connection))
-                {
-                    var tableCount = (int)await command.ExecuteScalarAsync();
-                    Assert.True(tableCount > 0, "No tables were created in the database.");
-                }
-            }
+            await using var connection = new SqlConnection(_connectionString);
+            await connection.OpenAsync();
+            await using var command = new SqlCommand("SELECT COUNT(*) FROM sys.tables", connection);
+            var tableCount = (int)await command.ExecuteScalarAsync();
+            Assert.True(tableCount > 0, "No tables were created in the database.");
         }
 
         public async Task DisposeAsync()
