@@ -32,7 +32,10 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '8.0.x' 
+          dotnet-version: '8.0.x'
+
+      - name: Install GitVersion
+        run: dotnet tool install --global GitVersion.Tool
 
       - name: Restore dependencies
         run: dotnet restore
@@ -42,3 +45,15 @@ jobs:
 
       - name: Run Tests
         run: dotnet test --no-build --verbosity normal
+
+      - name: Generate Version Info
+        id: gitversion
+        run: gitversion /output json /showvariable SemVer
+
+      - name: Pack NuGet Package
+        run: dotnet pack --configuration Release --output ./nupkg /p:Version=${{ steps.gitversion.outputs.SemVer }}
+
+      - name: Publish NuGet Package
+        run: dotnet nuget push ./nupkg/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
+        env:
+          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
