@@ -36,6 +36,9 @@ jobs:
           
       - name: Setup GitVersion
         uses: gittools/actions/gitversion/setup@v0.9.12
+        with:
+          versionSpec: '5.x' # Specify the version of GitVersion you want to install
+
 
       - name: Run GitVersion
         id: gitversion
