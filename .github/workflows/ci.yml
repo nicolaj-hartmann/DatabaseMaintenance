@@ -18,7 +18,7 @@ jobs:
         ports:
           - 1433:1433
         env:
-          SA_PASSWORD: YourPassword123
+          SA_PASSWORD: yourStrong(!)Password
           ACCEPT_EULA: Y
         options: >-
           --health-cmd="exit 0"

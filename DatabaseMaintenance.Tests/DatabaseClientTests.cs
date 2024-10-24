@@ -1,4 +1,5 @@
-﻿using Microsoft.Data.SqlClient; // Adjust this according to your project's namespace
+﻿using System.Text;
+using Microsoft.Data.SqlClient;
 using Xunit;
 
 namespace DatabaseMaintenance.Tests
@@ -6,44 +7,91 @@ namespace DatabaseMaintenance.Tests
     public class DatabaseClientTests : IAsyncLifetime
     {
         private const int SqlServerPort = 1433; // Default SQL Server port
-        private const string ConnectionStringTemplate = "Server=localhost,{0};Database={1};User Id=sa;Password=YourPassword123;";
+        private readonly string _connectionString;
         private string _databaseName;
-        private string _connectionString;
+
+        public DatabaseClientTests()
+        {
+            _connectionString = $"Server=localhost,{SqlServerPort};User Id=sa;Password=yourStrong(!)Password;TrustServerCertificate=True;";
+        }
 
         public async Task InitializeAsync()
         {
             _databaseName = "TestDatabase_" + Guid.NewGuid().ToString("N");
-            _connectionString = string.Format(ConnectionStringTemplate, SqlServerPort, _databaseName);
-
             await CreateDatabase();
         }
 
         private async Task CreateDatabase()
         {
-            await using var connection = new SqlConnection($"Server=localhost,{SqlServerPort};User Id=sa;Password=YourPassword123;");
+            await using var connection = new SqlConnection(_connectionString);
             await connection.OpenAsync();
             await using var command = new SqlCommand($"CREATE DATABASE {_databaseName};", connection);
             await command.ExecuteNonQueryAsync();
         }
 
-        [Fact]
-        public async Task Initialize_ShouldRunScriptsSuccessfully()
+        [Theory]
+        [InlineData("CommandExecute")]
+        [InlineData("IndexOptimize")]
+        public async Task Initialize_ShouldRunScriptsSuccessfully(string storedProcName)
         {
-            var dbClient = new DatabaseClient(_connectionString);
+            var dbClient = new DatabaseClient(GetTestConnectionString());
             await dbClient.Initialize();
 
-            // Add assertions to verify that the scripts were executed correctly.
-            // Example: Check if a specific table was created or if data exists.
-            await using var connection = new SqlConnection(_connectionString);
+            await using var connection = new SqlConnection(GetTestConnectionString());
             await connection.OpenAsync();
-            await using var command = new SqlCommand("SELECT COUNT(*) FROM sys.tables", connection);
-            var tableCount = (int)await command.ExecuteScalarAsync();
-            Assert.True(tableCount > 0, "No tables were created in the database.");
+
+            await using var command = new SqlCommand($"SELECT COUNT(*) FROM sys.objects WHERE name = '{storedProcName}' AND type IN (N'P', N'PC')", connection);
+            var procExists = (int)await command.ExecuteScalarAsync();
+
+            Assert.True(procExists > 0, $"The stored procedure '{storedProcName}' was not created in the database.");
+        }
+
+        [Fact]
+        public async Task Run_IndexOptimize()
+        {
+            var dbClient = new DatabaseClient(GetTestConnectionString());
+            await dbClient.Initialize();
+
+            var options = new IndexOptions
+            {
+                FragmentationLevel2 = 50,
+                Databases = _databaseName
+            };
+            var stringBuilder = new StringBuilder();
+
+            await dbClient.ExecuteIndexOptimizeProcedure(options, message => stringBuilder.AppendLine(message));
+
+            Assert.Contains("@FragmentationLevel2 = 50", stringBuilder.ToString());
+            Assert.Contains(_databaseName, stringBuilder.ToString());
+        }
+        
+        [Fact]
+        public async Task Run_IndexOptimize_On_NonExisting_Database()
+        {
+            var dbClient = new DatabaseClient(GetTestConnectionString());
+            await dbClient.Initialize();
+
+            var options = new IndexOptions
+            {
+                FragmentationLevel2 = 50,
+                Databases = "unknown_database"
+            };
+            var stringBuilder = new StringBuilder();
+
+            await dbClient.ExecuteIndexOptimizeProcedure(options, message => stringBuilder.AppendLine(message));
+
+            Assert.Contains("The following databases in the @Databases parameter do not exist: [unknown_database]", stringBuilder.ToString());
+        }
+
+
+        private string GetTestConnectionString()
+        {
+            return $"Server=localhost,{SqlServerPort};Database={_databaseName};User Id=sa;Password=yourStrong(!)Password;TrustServerCertificate=True;";
         }
 
         public async Task DisposeAsync()
         {
-            await using var connection = new SqlConnection($"Server=localhost,{SqlServerPort};User Id=sa;Password=YourPassword123;");
+            await using var connection = new SqlConnection(_connectionString);
             await connection.OpenAsync();
 
             await using (var command = new SqlCommand($"ALTER DATABASE {_databaseName} SET SINGLE_USER WITH ROLLBACK IMMEDIATE;", connection))
@@ -66,7 +114,5 @@ namespace DatabaseMaintenance.Tests
                 }
             });
         }
-
-
     }
 }
