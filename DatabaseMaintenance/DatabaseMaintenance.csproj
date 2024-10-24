@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageId>DatabaseMaintenance</PackageId>
+        <Version>1.0.0</Version>
+        <Authors>Nicolaj Helmer Hartmann</Authors>
+        <Company>Softwarehuset.com</Company>
+        <Description>A .NET library for managing and optimizing database maintenance tasks, including index optimization and script execution, with customizable options for your specific needs.</Description>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageProjectUrl>https://github.com/nicolaj-hartmann/DatabaseMaintenance</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/nicolaj-hartmann/DatabaseMaintenance</RepositoryUrl>
+        <LangVersion>latest</LangVersion>
+        <NoWarn>NU1500;NU1701</NoWarn>
+    </PropertyGroup>
+
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.2"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Remove="Scripts\CommandExecute.sql"/>
+        <EmbeddedResource Include="Scripts\CommandExecute.sql"/>
+        <None Remove="Scripts\IndexOptimize.sql"/>
+        <EmbeddedResource Include="Scripts\IndexOptimize.sql"/>
+        <None Include="..\README.md" Pack="true" PackagePath="\"/>
+    </ItemGroup>
+</Project>
