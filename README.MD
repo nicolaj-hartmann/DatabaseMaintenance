@@ -88,3 +88,6 @@ The `DatabaseMaintenance` library provides a robust solution for efficiently man
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fnicolaj-hartmann%2FDatabaseMaintenance.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fnicolaj-hartmann%2FDatabaseMaintenance?ref=badge_large)
