@@ -1,4 +1,4 @@
-name: .NET Core CI
+name: CI
 
 on:
   push:
@@ -52,7 +52,14 @@ jobs:
         run: dotnet build --no-restore
 
       - name: Run Tests
-        run: dotnet test --no-build --verbosity normal
+        run: dotnet test --no-build --verbosity normal --collect:"XPlat Code Coverage"
+        
+      - name: Publish Code Coverage Results
+        uses: codecov/codecov-action@v2
+        with:
+          files: '**/coverage.cobertura.xml'
+          flags: unittests
+          name: codecov-umbrella
 
       - name: Determine Version
         id: gitversion
