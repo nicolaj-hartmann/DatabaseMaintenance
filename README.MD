@@ -1,6 +1,6 @@
 # DatabaseMaintenance
 
-[![NuGet Package](https://img.shields.io/nuget/v/DatabaseMaintenance.svg)](https://www.nuget.org/packages/DatabaseMaintenance)
+[![NuGet Package](https://img.shields.io/nuget/v/DatabaseMaintenance.svg)](https://www.nuget.org/packages/DatabaseMaintenance)[![codecov](https://codecov.io/github/nicolaj-hartmann/DatabaseMaintenance/graph/badge.svg?token=G468V9HDZW)](https://codecov.io/github/nicolaj-hartmann/DatabaseMaintenance)
 
 DatabaseMaintenance is a .NET library designed for managing and optimizing database maintenance tasks, including index optimization and script execution. This library provides a flexible interface for configuring and running various maintenance operations with ease.
 
@@ -20,26 +20,26 @@ In modern applications, maintaining database performance is crucial. As database
 
    ```bash
    dotnet add package DatabaseMaintenance
-    ```
-   
+   ```
+
 2. **Usage**
 
    Here’s a basic example of how to use the DatabaseClient and IndexOptions classes to perform index optimization:
 
    ```csharp
    using DatabaseMaintenance;
-    
+
     var options = new IndexOptions
     {
     FragmentationLevel2 = 50, // Customize your options here
     Databases = "YourDatabaseName"
     };
-    
+
     var dbClient = new DatabaseClient("YourConnectionString");
-    
+
     // Optional: Create a CancellationTokenSource for canceling long-running tasks
     var cts = new CancellationTokenSource();
-    
+
     try
     {
     await dbClient.ExecuteIndexOptimizeProcedure(options, Console.WriteLine, cts.Token);
@@ -57,19 +57,23 @@ In modern applications, maintaining database performance is crucial. As database
 ## Key Features
 
 - **Customizable Options**:
-    - Set various parameters for index optimization through the `IndexOptions` object, allowing you to tailor maintenance operations to your specific database needs.
+
+  - Set various parameters for index optimization through the `IndexOptions` object, allowing you to tailor maintenance operations to your specific database needs.
 
 - **Cancellation Tokens**:
-    - Easily manage long-running operations with `CancellationToken`. This feature enables you to cancel the execution of maintenance tasks if they exceed your desired time limits, providing flexibility in managing long-running queries.
+
+  - Easily manage long-running operations with `CancellationToken`. This feature enables you to cancel the execution of maintenance tasks if they exceed your desired time limits, providing flexibility in managing long-running queries.
 
 - **No Connection Timeouts**:
-    - All connection timeouts have been removed, ensuring that operations can wait indefinitely for completion without unexpected interruptions, allowing for smoother execution of database maintenance tasks.
+
+  - All connection timeouts have been removed, ensuring that operations can wait indefinitely for completion without unexpected interruptions, allowing for smoother execution of database maintenance tasks.
 
 - **Easy Integration**:
-    - Simple installation via NuGet and straightforward usage patterns make it easy to incorporate into existing .NET applications, enhancing your database management capabilities with minimal effort.
+
+  - Simple installation via NuGet and straightforward usage patterns make it easy to incorporate into existing .NET applications, enhancing your database management capabilities with minimal effort.
 
 - **Logging Capabilities**:
-    - Output messages and logs during execution can be captured and displayed, facilitating debugging and monitoring of maintenance tasks. For now you need to parse the result yourselves.
+  - Output messages and logs during execution can be captured and displayed, facilitating debugging and monitoring of maintenance tasks. For now you need to parse the result yourselves.
 
 ---
 
