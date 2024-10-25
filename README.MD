@@ -1,7 +1,8 @@
 # DatabaseMaintenance
 
-[![NuGet Package](https://img.shields.io/nuget/v/DatabaseMaintenance.svg)](https://www.nuget.org/packages/DatabaseMaintenance)[![codecov](https://codecov.io/github/nicolaj-hartmann/DatabaseMaintenance/graph/badge.svg?token=G468V9HDZW)](https://codecov.io/github/nicolaj-hartmann/DatabaseMaintenance)
-[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fnicolaj-hartmann%2FDatabaseMaintenance.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fnicolaj-hartmann%2FDatabaseMaintenance?ref=badge_shield)
+[![NuGet Package](https://img.shields.io/nuget/v/DatabaseMaintenance.svg)](https://www.nuget.org/packages/DatabaseMaintenance)
+[![codecov](https://codecov.io/github/nicolaj-hartmann/DatabaseMaintenance/graph/badge.svg?token=G468V9HDZW)](https://codecov.io/github/nicolaj-hartmann/DatabaseMaintenance)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fnicolaj-hartmann%2FDatabaseMaintenance.svg?type=shield&issueType=license)](https://app.fossa.com/projects/git%2Bgithub.com%2Fnicolaj-hartmann%2FDatabaseMaintenance?ref=badge_shield&issueType=license)
 
 DatabaseMaintenance is a .NET library designed for managing and optimizing database maintenance tasks, including index optimization and script execution. This library provides a flexible interface for configuring and running various maintenance operations with ease.
 
