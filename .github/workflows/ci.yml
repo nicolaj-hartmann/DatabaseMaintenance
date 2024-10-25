@@ -55,11 +55,10 @@ jobs:
         run: dotnet test --no-build --verbosity normal --collect:"XPlat Code Coverage"
         
       - name: Publish Code Coverage Results
-        uses: codecov/codecov-action@v2
+        uses: codecov/codecov-action@v4
         with:
           files: '**/coverage.cobertura.xml'
-          flags: unittests
-          name: codecov-umbrella
+          token: ${{ secrets.CODECOV_TOKEN }}
 
       - name: Determine Version
         id: gitversion
