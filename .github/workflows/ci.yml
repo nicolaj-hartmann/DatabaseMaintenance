@@ -12,9 +12,9 @@ permissions:
   contents: write
 
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
-    
+
     services:
       sqlserver:
         image: mcr.microsoft.com/mssql/server:2022-latest
@@ -37,13 +37,12 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '8.0.x'
-
+          dotnet-version: "8.0.x"
 
       - name: Install GitVersion
         uses: gittools/actions/gitversion/setup@v3.0.0
         with:
-          versionSpec: '6.x'
+          versionSpec: "6.x"
 
       - name: Restore dependencies
         run: dotnet restore
@@ -53,12 +52,37 @@ jobs:
 
       - name: Run Tests
         run: dotnet test --no-build --verbosity normal --collect:"XPlat Code Coverage"
-        
+
       - name: Publish Code Coverage Results
         uses: codecov/codecov-action@v4
         with:
-          files: '**/coverage.cobertura.xml'
+          files: "**/coverage.cobertura.xml"
           token: ${{ secrets.CODECOV_TOKEN }}
+
+      - name: Determine Version
+        id: gitversion
+        uses: gittools/actions/gitversion/execute@v3.0.0
+
+  publish:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    environment:
+      name: approval-required
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Install GitVersion
+        uses: gittools/actions/gitversion/setup@v3.0.0
+        with:
+          versionSpec: "6.x"
 
       - name: Determine Version
         id: gitversion
