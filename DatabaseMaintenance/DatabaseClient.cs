@@ -25,33 +25,27 @@ namespace DatabaseMaintenance
 
         public async Task Initialize()
         {
-            using (var connection = new SqlConnection(_connectionString))
+            using var connection = new SqlConnection(_connectionString);
+            await connection.OpenAsync();
+
+            var scripts = LoadScripts(); 
+            foreach (var script in scripts)
             {
-                await connection.OpenAsync();
+                var commands = SplitSqlCommands(script);
 
-                var scripts = LoadScripts(); // Load your complete SQL script
-                foreach (var script in scripts)
+                foreach (var commandText in commands)
                 {
-                    var commands = SplitSqlCommands(script);
-
-                    foreach (var commandText in commands)
+                    var trimmedCommand = commandText.Trim();
+                    if (string.IsNullOrWhiteSpace(trimmedCommand)) continue;
+                        
+                    using var command = new SqlCommand(trimmedCommand, connection);
+                    try
                     {
-                        var trimmedCommand = commandText.Trim();
-                        if (!string.IsNullOrWhiteSpace(trimmedCommand))
-                        {
-                            using (var command = new SqlCommand(trimmedCommand, connection))
-                            {
-                                try
-                                {
-                                    await command.ExecuteNonQueryAsync();
-                                }
-                                catch (SqlException ex)
-                                {
-                                    // Log or handle the error appropriately
-                                    Console.WriteLine($"SQL Error: {ex.Message}");
-                                }
-                            }
-                        }
+                        await command.ExecuteNonQueryAsync();
+                    }
+                    catch (SqlException ex)
+                    {
+                        Console.WriteLine($"SQL Error: {ex.Message}");
                     }
                 }
             }
@@ -65,7 +59,7 @@ namespace DatabaseMaintenance
             await connection.OpenAsync(cancellationToken.Value);
 
             // Subscribe to the InfoMessage event to capture messages
-            connection.InfoMessage += (sender, e) =>
+            connection.InfoMessage += (_, e) =>
             {
                 foreach (SqlError error in e.Errors)
                 {
@@ -120,7 +114,7 @@ namespace DatabaseMaintenance
         private IEnumerable<string> SplitSqlCommands(string script)
         {
             var commands = new List<string>();
-            var lines = script.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
+            var lines = script.Split(["\r\n", "\r", "\n"], StringSplitOptions.None);
             var commandBuilder = new StringBuilder();
 
             foreach (var line in lines)
@@ -129,11 +123,9 @@ namespace DatabaseMaintenance
 
                 if (trimmedLine.Equals("GO", StringComparison.OrdinalIgnoreCase))
                 {
-                    if (commandBuilder.Length > 0)
-                    {
-                        commands.Add(commandBuilder.ToString());
-                        commandBuilder.Clear();
-                    }
+                    if (commandBuilder.Length <= 0) continue;
+                    commands.Add(commandBuilder.ToString());
+                    commandBuilder.Clear();
                 }
                 else
                 {
@@ -163,7 +155,7 @@ namespace DatabaseMaintenance
                 if (resourceName.EndsWith(".sql"))
                 {
                     using var stream = assembly.GetManifestResourceStream(resourceName);
-                    using var reader = new StreamReader(stream);
+                    using var reader = new StreamReader(stream!);
                     scripts.Add(reader.ReadToEnd());
                 }
             }

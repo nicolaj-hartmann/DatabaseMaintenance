@@ -26,5 +26,7 @@
         <None Remove="Scripts\IndexOptimize.sql"/>
         <EmbeddedResource Include="Scripts\IndexOptimize.sql"/>
         <None Include="..\README.md" Pack="true" PackagePath="\"/>
+        <None Remove="Scripts\CommandLog.sql" />
+        <EmbeddedResource Include="Scripts\CommandLog.sql" />
     </ItemGroup>
 </Project>
