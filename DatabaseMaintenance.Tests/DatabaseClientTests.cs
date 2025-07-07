@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using Microsoft.Data.SqlClient;
 using Xunit;
+// ReSharper disable AccessToDisposedClosure
 
 namespace DatabaseMaintenance.Tests
 {
@@ -49,7 +50,8 @@ namespace DatabaseMaintenance.Tests
             var options = new IndexOptions
             {
                 FragmentationLevel2 = 50,
-                Databases = _databaseName
+                Databases = _databaseName,
+                LogToTable = "Y"
             };
             var stringBuilder = new StringBuilder();
 

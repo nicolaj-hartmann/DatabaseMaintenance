@@ -1,3 +1,6 @@
+// ReSharper disable InconsistentNaming
+namespace DatabaseMaintenance;
+
 public class IndexOptions
 {
     public string Databases { get; set; } = null;
