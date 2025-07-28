@@ -17,14 +17,14 @@
 
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.Data.SqlClient" Version="6.0.1" />
+        <PackageReference Include="Microsoft.Data.SqlClient" Version="6.1.0" />
     </ItemGroup>
 
     <ItemGroup>
-        <None Remove="Scripts\CommandExecute.sql"/>
-        <EmbeddedResource Include="Scripts\CommandExecute.sql"/>
-        <None Remove="Scripts\IndexOptimize.sql"/>
-        <EmbeddedResource Include="Scripts\IndexOptimize.sql"/>
-        <None Include="..\README.md" Pack="true" PackagePath="\"/>
+        <None Remove="Scripts\CommandExecute.sql" />
+        <EmbeddedResource Include="Scripts\CommandExecute.sql" />
+        <None Remove="Scripts\IndexOptimize.sql" />
+        <EmbeddedResource Include="Scripts\IndexOptimize.sql" />
+        <None Include="..\README.md" Pack="true" PackagePath="\" />
     </ItemGroup>
 </Project>
